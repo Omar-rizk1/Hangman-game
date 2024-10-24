@@ -1,48 +1,56 @@
-import random 
+import random
+
 from hangman_words import word_list
 from hangman_arts import stages, logo
 
+lives = 6
+
 print(logo)
 
-lives = 6 
 chosen_word = random.choice(word_list)
+print(chosen_word)
 
 placeholder = ""
-for position in chosen_word :
+word_length = len(chosen_word)
+for position in range(word_length):
     placeholder += "_"
+print("Word to guess: " + placeholder)
 
-print("Word to Guess : " + placeholder)
-game_over =False
+game_over = False
+correct_letters = []
 
-while not game_over :
-    print(f"*************************{lives} / 6 lives left *************************")
-    guess = input("Guess a letter:").lower()
+while not game_over:
+
+    print(f"****************************{lives}/6 LIVES LEFT****************************")
+    guess = input("Guess a letter: ").lower()
+
+    if guess in correct_letters:
+        print(f"You've already guessed {guess}")
 
     display = ""
-    correct_letters = []
 
-    for letter in chosen_word :
-
-        if guess == letter :
+    for letter in chosen_word:
+        if letter == guess:
             display += letter
             correct_letters.append(guess)
-
-        elif letter in correct_letters :
-             display += letter
-
+        elif letter in correct_letters:
+            display += letter
         else:
             display += "_"
 
-    print ("Word to Guess : " + display)
+    print("Word to guess: " + display)
 
-    if guess not in chosen_word :
+    if guess not in chosen_word:
         lives -= 1
-        
-        if lives == 0 :
-          game_over = True
-          print(F"*************************IT WAS {chosen_word} YOU LOSE************************")
-        print(stages[lives])
+        print(f"You guessed {guess}, that's not in the word. You lose a life.")
 
-    if "_" not in display :
+        if lives == 0:
+            game_over = True
+
+            print(f"***********************IT WAS {chosen_word}! YOU LOSE**********************")
+
+    if "_" not in display:
         game_over = True
-        print("*************************YOU WIN*************************")
+        print("****************************YOU WIN****************************")
+
+    print(stages[lives])
